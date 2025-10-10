@@ -1,0 +1,32 @@
+ Longest Palindromic Substring
+
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        if len(s) <= 1:
+            return s
+
+        start, end = 0, 0  # indices of longest palindrome found
+
+        for i in range(len(s)):
+            # Case 1: Odd-length palindrome (centered at i)
+            len1 = self.expandAroundCenter(s, i, i)
+            # Case 2: Even-length palindrome (centered between i and i+1)
+            len2 = self.expandAroundCenter(s, i, i + 1)
+
+            max_len = max(len1, len2)
+            if max_len > end - start:
+                # update start and end based on the palindrome length
+                start = i - (max_len - 1) // 2
+                end = i + max_len // 2
+
+        return s[start:end + 1]
+
+    def expandAroundCenter(self, s: str, left: int, right: int) -> int:
+        # Expand pointers while valid palindrome
+        while left >= 0 and right < len(s) and s[left] == s[right]:
+            left -= 1
+            right += 1
+        # Return the length of palindrome
+        return right - left - 1
+
+        
