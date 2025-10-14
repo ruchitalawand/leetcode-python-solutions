@@ -1,0 +1,43 @@
+from collections import Counter
+
+class Solution:
+    def findSubstring(self, s: str, words: list[str]) -> list[int]:
+        if not s or not words:
+            return []
+        
+        word_len = len(words[0])
+        total_len = word_len * len(words)
+        word_count = Counter(words)
+        res = []
+
+        for i in range(word_len):  # check each offset
+            left = i
+            seen = Counter()
+            count = 0  # number of words matched
+
+            # move the window by word_len
+            for j in range(i, len(s) - word_len + 1, word_len):
+                word = s[j:j + word_len]
+                if word in word_count:
+                    seen[word] += 1
+                    count += 1
+
+                    # if we see a word too many times, shrink from the left
+                    while seen[word] > word_count[word]:
+                        left_word = s[left:left + word_len]
+                        seen[left_word] -= 1
+                        count -= 1
+                        left += word_len
+
+                    # if we have matched all words
+                    if count == len(words):
+                        res.append(left)
+                else:
+                    # reset window
+                    seen.clear()
+                    count = 0
+                    left = j + word_len
+
+        return res
+
+        
