@@ -1,0 +1,11 @@
+#  Jump Game
+
+class Solution:
+    def canJump(self, nums):
+        max_reach = 0  # farthest index we can reach so far
+
+        for i, num in enumerate(nums):
+            if i > max_reach:
+                return False  # can't reach this position
+            max_reach = max(max_reach, i + num)
+        return True
