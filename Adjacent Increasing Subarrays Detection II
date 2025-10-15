@@ -1,0 +1,24 @@
+#Adjacent Increasing Subarrays Detection II
+
+class Solution:
+    def maxIncreasingSubarrays(self, nums: list[int]) -> int:
+        n = len(nums)
+        ans = 0
+        prev = 0     # length of previous increasing run
+        cur = 1      # length of current increasing run; at least one element
+
+        for i in range(1, n):
+            if nums[i] > nums[i - 1]:
+                cur += 1
+            else:
+                # Break in increasing run, update ans using the two possibilities
+                # 1) split current run into two adjacent parts: cur // 2
+                # 2) combine tail of previous and head of current: min(prev, cur)
+                ans = max(ans, cur // 2, min(prev, cur))
+                prev = cur
+                cur = 1
+
+        # After loop, handle the final run
+        ans = max(ans, cur // 2, min(prev, cur))
+
+        return ans
