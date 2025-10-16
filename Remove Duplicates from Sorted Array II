@@ -1,0 +1,13 @@
+# Remove Duplicates from Sorted Array II
+
+class Solution:
+    def removeDuplicates(self, nums):
+        k = 0  # index for placing next valid number
+
+        for num in nums:
+            # Allow if fewer than 2 elements, or num is not same as nums[k-2]
+            if k < 2 or num != nums[k - 2]:
+                nums[k] = num
+                k += 1
+        
+        return k
