@@ -1,0 +1,13 @@
+# Gray Code
+
+class Solution:
+    def grayCode(self, n):
+        result = [0]
+
+        for i in range(n):
+            add = 1 << i
+            # Reflect and add new bit
+            for num in reversed(result):
+                result.append(num + add)
+        
+        return result
