@@ -1,0 +1,27 @@
+#  Restore IP Addresses
+
+class Solution:
+    def restoreIpAddresses(self, s: str):
+        res = []
+
+        def backtrack(start, path):
+            # If 4 segments collected
+            if len(path) == 4:
+                if start == len(s):
+                    res.append(".".join(path))
+                return
+            
+            # Try segments of length 1 to 3
+            for l in range(1, 4):
+                if start + l > len(s):
+                    break
+                segment = s[start:start + l]
+                
+                # Skip invalid segments
+                if (segment.startswith("0") and len(segment) > 1) or int(segment) > 255:
+                    continue
+                
+                backtrack(start + l, path + [segment])
+        
+        backtrack(0, [])
+        return res
