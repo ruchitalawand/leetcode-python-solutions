@@ -1,0 +1,34 @@
+# Lexicographically Smallest String After Applying Operations
+
+from collections import deque
+
+class Solution:
+    def findLexSmallestString(self, s: str, a: int, b: int) -> str:
+        n = len(s)
+        seen = set([s])
+        ans = s
+        
+        queue = deque([s])
+        while queue:
+            cur = queue.popleft()
+            # update answer
+            if cur < ans:
+                ans = cur
+            
+            # Operation 1: add a to all odd indices
+            lst = list(cur)
+            for i in range(1, n, 2):
+                new_digit = (int(lst[i]) + a) % 10
+                lst[i] = str(new_digit)
+            add_s = "".join(lst)
+            if add_s not in seen:
+                seen.add(add_s)
+                queue.append(add_s)
+            
+            # Operation 2: rotate right by b
+            rot_s = cur[-b:] + cur[:-b]
+            if rot_s not in seen:
+                seen.add(rot_s)
+                queue.append(rot_s)
+        
+        return ans
