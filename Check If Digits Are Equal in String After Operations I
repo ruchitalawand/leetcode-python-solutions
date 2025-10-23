@@ -1,0 +1,14 @@
+#  Check If Digits Are Equal in String After Operations I
+
+class Solution:
+    def hasSameDigits(self, s: str) -> bool:
+        # simulation until 2 digits remain
+        while len(s) > 2:
+            # compute next string
+            new_chars = []
+            for i in range(len(s) - 1):
+                digit_sum_mod = (int(s[i]) + int(s[i+1])) % 10
+                new_chars.append(str(digit_sum_mod))
+            s = "".join(new_chars)
+        # now s has exactly two chars
+        return s[0] == s[1]
