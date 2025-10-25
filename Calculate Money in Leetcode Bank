@@ -1,0 +1,18 @@
+# Calculate Money in Leetcode Bank
+
+class Solution:
+    def totalMoney(self, n: int) -> int:
+        # Calculate number of complete weeks and remaining days
+        weeks = n // 7
+        days = n % 7
+
+        # Sum for complete weeks:
+        # Each week contributes 28 + 7*(week index)
+        # Sum of weeks = 28*weeks + 7*(0 + 1 + ... + (weeks-1)) = 28*weeks + 7*(weeks*(weeks-1)//2)
+        full_weeks_sum = 28 * weeks + 7 * (weeks * (weeks - 1) // 2)
+
+        # Sum for remaining days (in the partial week)
+        # Starts from (weeks + 1) for Monday
+        extra_days_sum = days * (weeks + 1) + (days * (days - 1) // 2)
+
+        return full_weeks_sum + extra_days_sum
