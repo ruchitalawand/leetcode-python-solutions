@@ -1,0 +1,49 @@
+# Next Greater Numerically Balanced Number
+
+from collections import Counter
+from typing import List
+
+class Solution:
+    def nextBeautifulNumber(self, n: int) -> int:
+        # Generate all numerically balanced numbers with total length <= 10
+        balanced_nums = []
+        
+        # backtrack to produce unique permutations from multiset (counter)
+        def gen_perms(counter: Counter, prefix: List[str], length_left: int):
+            if length_left == 0:
+                # join prefix to number (prefix is list of characters)
+                balanced_nums.append(int(''.join(prefix)))
+                return
+            for d in list(counter.keys()):
+                if counter[d] > 0:
+                    counter[d] -= 1
+                    prefix.append(d)
+                    gen_perms(counter, prefix, length_left - 1)
+                    prefix.pop()
+                    counter[d] += 1
+        
+        # enumerate subsets of digits 1..9 using bitmask
+        for mask in range(1, 1 << 9):  # 1..(2^9 - 1)
+            digits = []
+            total_len = 0
+            for i in range(9):  # i from 0..8 represents digit (i+1)
+                if (mask >> i) & 1:
+                    d = i + 1
+                    total_len += d
+                    digits.extend([str(d)] * d)
+            # limit the total length for tractable permutation generation
+            if 1 <= total_len <= 10:
+                # generate unique permutations
+                counter = Counter(digits)
+                gen_perms(counter, [], total_len)
+        
+        balanced_nums = sorted(set(balanced_nums))  # unique sorted
+        
+        # find smallest balanced number > n
+        for val in balanced_nums:
+            if val > n:
+                return val
+        
+        # In case none found (very unlikely with length cap 10), we can extend search.
+        # But with common input limits this is sufficient.
+        return -1
