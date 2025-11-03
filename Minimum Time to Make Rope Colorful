@@ -1,0 +1,19 @@
+#Minimum Time to Make Rope Colorful
+
+class Solution:
+    def minCost(self, colors: str, cost: list[int]) -> int:
+        if not colors:
+            return 0
+        total = 0
+        max_cost = cost[0]
+        n = len(colors)
+        for i in range(1, n):
+            if colors[i] == colors[i-1]:
+                # remove the cheaper one
+                total += min(max_cost, cost[i])
+                # keep the more expensive in the run
+                max_cost = max(max_cost, cost[i])
+            else:
+                # new color run
+                max_cost = cost[i]
+        return total
