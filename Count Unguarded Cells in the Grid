@@ -1,0 +1,33 @@
+# Count Unguarded Cells in the Grid
+
+class Solution:
+    def countUnguarded(self, m: int, n: int, guards: list[list[int]], walls: list[list[int]]) -> int:
+        # 0 = empty, 1 = wall, 2 = guard, 3 = watched
+        grid = [[0]*n for _ in range(m)]
+
+        # Mark walls and guards
+        for r, c in walls:
+            grid[r][c] = 1
+        for r, c in guards:
+            grid[r][c] = 2
+
+        # Directions → up, down, left, right
+        directions = [(-1,0), (1,0), (0,-1), (0,1)]
+
+        # Mark watched cells
+        for gr, gc in guards:
+            for dr, dc in directions:
+                r, c = gr + dr, gc + dc
+                while 0 <= r < m and 0 <= c < n:
+                    # Stop at wall or guard
+                    if grid[r][c] in [1, 2]:
+                        break
+                    # Mark as watched
+                    if grid[r][c] == 0:
+                        grid[r][c] = 3
+                    r += dr
+                    c += dc
+
+        # Count unguarded cells (still 0)
+        unguarded = sum(cell == 0 for row in grid for cell in row)
+        return unguarded
