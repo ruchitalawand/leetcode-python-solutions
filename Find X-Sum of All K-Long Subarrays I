@@ -1,0 +1,32 @@
+#  Find X-Sum of All K-Long Subarrays I
+
+from collections import Counter
+
+class Solution:
+    def findXSum(self, nums, k, x):
+        n = len(nums)
+        ans = []
+
+        for i in range(n - k + 1):
+            # Step 1: Take subarray of length k
+            sub = nums[i:i + k]
+            
+            # Step 2: Count occurrences
+            freq = Counter(sub)
+            
+            # Step 3: Sort elements by:
+            #   - Frequency descending
+            #   - Value descending (for tie-break)
+            sorted_items = sorted(freq.items(), key=lambda p: (p[1], p[0]), reverse=True)
+            
+            # Step 4: Take top x most frequent elements
+            top_x = sorted_items[:x]
+            top_values = {val for val, _ in top_x}
+            
+            # Step 5: Keep only elements that are in top x and sum them
+            sub_sum = sum(num for num in sub if num in top_values)
+            
+            ans.append(sub_sum)
+        
+        return ans
+
