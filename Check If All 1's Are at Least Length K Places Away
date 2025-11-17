@@ -1,0 +1,18 @@
+# Check If All 1's Are at Least Length K Places Away
+
+from typing import List
+
+class Solution:
+    def kLengthApart(self, nums: List[int], k: int) -> bool:
+        last_one = -10**9  # far negative so first 1 won't fail
+        for i, v in enumerate(nums):
+            if v == 1:
+                if i - last_one - 1 < k:
+                    return False
+                last_one = i
+        return True
+
+# Example local test
+if __name__ == "__main__":
+    print(Solution().kLengthApart([1,0,0,0,1,0,0,1], 2))  # True
+    print(Solution().kLengthApart([1,0,0,1,0,1], 2))      # False
