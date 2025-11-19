@@ -1,0 +1,10 @@
+# Keep Multiplying Found Values by Two
+
+class Solution:
+    def findFinalValue(self, nums: list[int], original: int) -> int:
+        values = set(nums)  # O(n) lookup structure
+
+        while original in values:
+            original *= 2
+
+        return original
