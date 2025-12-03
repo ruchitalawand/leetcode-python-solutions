@@ -1,0 +1,42 @@
+# Maximum Number of K-Divisible Components
+
+from collections import deque
+
+class Solution:
+    def maxKDivisibleComponents(self, n: int, edges: list[list[int]], values: list[int], k: int) -> int:
+        # build adjacency
+        g = [[] for _ in range(n)]
+        for a, b in edges:
+            g[a].append(b)
+            g[b].append(a)
+
+        # build parent array and traversal order using iterative DFS
+        parent = [-1] * n
+        order = []
+        stack = [0]
+        parent[0] = -2  # mark root parent as a special value
+        while stack:
+            node = stack.pop()
+            order.append(node)
+            for nei in g[node]:
+                if parent[nei] == -1:
+                    parent[nei] = node
+                    stack.append(nei)
+
+        # sub_mod will hold subtree sum modulo k for each node
+        sub_mod = [val % k for val in values]
+        cuts = 0
+
+        # process nodes in reverse order (post-order)
+        for node in reversed(order):
+            for nei in g[node]:
+                if parent[nei] == node:   # nei is a child of node
+                    if sub_mod[nei] % k == 0:
+                        # we can cut edge (node - nei) and form a valid component
+                        cuts += 1
+                        # do NOT add child's sum to parent (it's separated)
+                    else:
+                        sub_mod[node] = (sub_mod[node] + sub_mod[nei]) % k
+
+        # number of components = cuts + 1 (whole tree split into components)
+        return cuts + 1
