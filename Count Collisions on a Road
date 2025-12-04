@@ -1,0 +1,19 @@
+# Count Collisions on a Road
+
+class Solution:
+    def countCollisions(self, directions: str) -> int:
+        n = len(directions)
+        # skip leading 'L' (they go off the road)
+        i = 0
+        while i < n and directions[i] == 'L':
+            i += 1
+        # skip trailing 'R' (they go off the road)
+        j = n - 1
+        while j >= 0 and directions[j] == 'R':
+            j -= 1
+        if i > j:
+            return 0
+        # in the middle substring, every 'L' or 'R' will cause collisions
+        middle_len = j - i + 1
+        s_count = directions[i:j+1].count('S')
+        return middle_len - s_count
